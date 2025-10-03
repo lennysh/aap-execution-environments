@@ -91,6 +91,7 @@ The definitions for the execution environments are located in the `vars/` direct
 | Config as Code for AAP 2.5 | 2.16.x | RHEL 8 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel8.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel8) |
 | Config as Code for AAP 2.5 | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel9) |
 | Config as Code for AAP 2.6 | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-26/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-26/ee-casc-rhel9) |
+| Building ISO's | 2.15.x | RHEL 9 | [Link](vars/ee-xorriso-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ee-xorriso-rhel9) |
 
 ## How It Works
 

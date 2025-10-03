@@ -1,0 +1,36 @@
+---
+dest_registry_name: quay.io
+ansible_core_version: 2.15
+image_name: lshirley/ee-xorriso-rhel9
+ee_base_image: registry.access.redhat.com/ubi9/ubi:latest
+ee_base_sig_name: registry.access.redhat.com/ubi9/ubi:latest
+ee_package_manager_path: /usr/bin/dnf
+ee_ansible_core: "ansible-core=={{ ansible_core_version }}"
+ee_ansible_runner: ansible-runner
+# ee_python_interpreter:
+#  python_path: "/usr/bin/python3.11"
+# ee_build_files:
+#   - src: "{{ build_ee_dest_dir }}/ansible.cfg"
+#     dest: configs
+# ee_bindep:
+#   - xorriso [platform:rpm]
+ee_python:
+  - requests
+# ee_collections:
+#   -
+ee_prepend_base:
+  - RUN subscription-manager register --activationkey={{ rhel_activationkey }} --org={{ rhel_org }}
+ee_append_base:
+  - RUN dnf install -y xorriso
+# ee_python_interpreter:
+#  package_system: "python310"
+#  python_path: "/usr/bin/python3.10"
+# ee_prepend_galaxy:
+#   -
+# ee_prepend_builder:
+#   -
+# ee_prepend_final:
+#   -
+ee_append_final:
+  - RUN dnf clean all && rm -rf /var/cache/yum
+  - RUN subscription-manager unregister
