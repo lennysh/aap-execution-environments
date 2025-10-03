@@ -1,6 +1,6 @@
 # Ansible Execution Environment (EE) Builder
 
-This repository contains Ansible automation to build custom Execution Environments (EEs) for use with Ansible Automation Platform. It uses `ansible-builder` to assemble the EEs based on definition files and pushes them to a container registry.
+This repository contains Ansible automation to build custom Execution Environments (EEs) for use with Ansible Automation Platform (or ansible-navigator). It uses `ansible-builder` to assemble the EEs based on definition files and pushes them to a container registry.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ Before you begin, ensure you have the following tools installed on your system:
 -   `podman` (or another compatible container engine)
 -   `ansible-vault`
 
-You will also need the `containers.podman` Ansible collection:
+You will also need one or more Ansible collections:
 ```bash
 ansible-galaxy collection install -r collections/requirements.yml
 ```
