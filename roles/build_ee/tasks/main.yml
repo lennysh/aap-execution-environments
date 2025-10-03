@@ -1,0 +1,101 @@
+---
+- name: Pull builder images
+  containers.podman.podman_image:
+    name: "{{ item }}"
+    username: "{{ registry_user }}"
+    password: "{{ registry_pass }}"
+    force: true
+  loop:
+    - "{{ ee_base_image }}"
+    # - "{{ ee_builder_image }}"
+  when: build_ee_version == 1
+
+- name: "Delete old EE: {{ dest_registry_name }}/{{ image_name }}"
+  containers.podman.podman_image:
+    name: "{{ dest_registry_name }}/{{ image_name }}"
+    state: absent
+    force: true
+
+- name: Make sure dest dir exists
+  ansible.builtin.file:
+    name: "{{ build_ee_dest_dir }}"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0755"
+
+- name: Clean out previous runs
+  ansible.builtin.file:
+    name: "{{ build_ee_dest_dir }}/context"
+    state: absent
+
+- name: Template out builder files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ build_ee_dest_dir }}{{ item }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: '0644'
+  loop:
+    - ansible.cfg
+    - bindep.txt
+    - execution-environment.yml
+    - requirements.txt
+    - requirements.yml
+
+- name: "Block: ansible-builder"
+  block:
+    - name: Build new EE on version 1 without signature verification
+      ansible.builtin.command:
+        cmd: 'ansible-builder build -t {{ dest_registry_name }}/{{ image_name }} --prune-images'
+        chdir: "{{ build_ee_dest_dir }}"
+      changed_when: true
+      when: build_ee_version == 1
+      register: build_log
+
+    - name: Build new EE with container signature verification on version 2 or 3
+      ansible.builtin.command:
+        cmd: 'ansible-builder build -vvv -t {{ dest_registry_name }}/{{ image_name }} --prune-images --container-policy=system --squash=new'
+        chdir: "{{ build_ee_dest_dir }}"
+      changed_when: true
+      when: build_ee_version == 2 or build_ee_version == 3
+      register: build_log
+
+  always:
+
+    - name: Dump build_log to file
+      ansible.builtin.copy:
+        content: "{{ build_log.stdout }}"
+        dest: "{{ build_ee_dest_dir }}/ansible-builder.log"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: '0644'
+
+- name: Create new tag on EE based on date time of creation
+  containers.podman.podman_tag:
+    image: "{{ dest_registry_name }}/{{ image_name }}"
+    target_names:
+      - "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}"
+
+- name: "Push new EE to: {{ dest_registry_name }}"
+  containers.podman.podman_image:
+    name: "{{ dest_registry_name }}/{{ image_name }}"
+    tag: "{{ item }}"
+    push: true
+    username: "{{ dest_registry_user }}"
+    password: "{{ dest_registry_pass }}"
+  loop:
+    - "{{ ansible_date_time.iso8601_basic_short }}"
+    - latest
+
+- name: Remove extra tag
+  containers.podman.podman_image:
+    name: "{{ dest_registry_name }}/{{ image_name }}"
+    tag: "{{ ansible_date_time.iso8601_basic_short }}"
+    state: absent
+
+# - name: Delete completed EE to free space
+#   containers.podman.podman_image:
+#     name: "{{ dest_registry_name }}/{{ image_name }}"
+#     state: absent
+#     force: true

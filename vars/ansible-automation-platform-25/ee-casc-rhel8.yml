@@ -1,0 +1,45 @@
+---
+dest_registry_name: quay.io
+rhel_version: rhel8
+ansible_core_version: 2.16
+image_name: lshirley/ansible-automation-platform-25/ee-casc-{{ rhel_version | trim }}
+ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_package_manager_path: /usr/bin/microdnf
+# ee_python_interpreter:
+#  python_path: "/usr/bin/python3.11"
+ee_build_files:
+  - src: "{{ build_ee_dest_dir }}/ansible.cfg"
+    dest: configs
+ee_bindep:
+  - python3.11-devel [platform:rpm]
+  - pkg-config [platform:rpm]
+  - systemd-devel [platform:rpm]
+  - gcc [platform:rpm]
+# ee_python:
+#   -
+ee_collections:
+  - name: infra.aap_configuration
+  - name: infra.aap_configuration_extended
+  - name: ansible.controller
+    version: "'>=4.6,<4.7'"
+  - name: ansible.platform
+    version: "'>=2.5,<2.6'"
+  - name: ansible.eda
+  - name: ansible.hub
+  - name: community.general
+# ee_prepend_base:
+#   - RUN microdnf upgrade -y
+# ee_python_interpreter:
+#  package_system: "python310"
+#  python_path: "/usr/bin/python3.10"
+ee_prepend_galaxy:
+  - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
+# ee_prepend_builder:
+#   -
+# ee_prepend_final:
+#   -
+ee_append_final:
+  - RUN microdnf reinstall tzdata -y
+  - RUN rm -f /etc/ansible/ansible.cfg
+  - RUN microdnf clean all

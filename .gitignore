@@ -1,0 +1,5 @@
+.keyring*
+.vault*
+.ansible*
+ansible.cfg
+_build/

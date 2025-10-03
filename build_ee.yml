@@ -1,0 +1,17 @@
+---
+
+- name: Build new EE
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  tags: buildee
+  vars_files:
+    - "{{ playbook_dir }}/.vault.yml"
+
+  pre_tasks:
+    - name: "Include EE vars: {{ ee_vars_file | basename }}"
+      ansible.builtin.include_vars:
+        file: "{{ ee_vars_file }}"
+
+  roles:
+    - build_ee
