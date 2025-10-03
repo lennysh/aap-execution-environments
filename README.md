@@ -24,7 +24,7 @@ Before you begin, ensure you have the following tools installed on your system:
 
 You will also need the `containers.podman` Ansible collection:
 ```bash
-ansible-galaxy collection install containers.podman
+ansible-galaxy collection install -r collections/requirements.yml
 ```
 
 ## Configuration
@@ -72,13 +72,13 @@ To build an EE, run the `build_ee.yml` playbook and specify which EE definition 
 
 **Example:**
 
-To build the `ee-casc-rhel9` environment for Ansible Automation Platform 2.4, run the following command:
+To build the `ee-casc-rhel9` environment for Ansible Automation Platform 2.6, run the following command:
 
 ```bash
-ansible-playbook build_ee.yml --extra-vars "ee_vars_file=vars/ansible-automation-platform-24/ee-casc-rhel9.yml"
+ansible-playbook build_ee.yml --extra-vars "ee_vars_file=vars/ansible-automation-platform-26/ee-casc-rhel9.yml"
 ```
 
-The playbook will build the container image and push it to the destination registry specified in your `.vault.yml` file (e.g., `quay.io/lshirley/ansible-automation-platform-24/ee-casc-rhel9`).
+The playbook will build the container image and push it to the destination registry specified in your `.vault.yml` file (e.g., `quay.io/lshirley/ansible-automation-platform-26/ee-casc-rhel9`).
 
 ## Available Execution Environments
 
