@@ -82,15 +82,15 @@ The playbook will build the container image and push it to the destination regis
 
 ## Available Execution Environments
 
-The definitions for the execution environments are located in the `vars/` directory, organized by Ansible Automation Platform version.
+The definitions for the execution environments are located in the `vars/` directory.
 
-| Purpose | OS Version | Var File | Public Repo Link |
-| :------ | :--------: | :------- | :--------------: |
-| Config as Code for AAP 2.4 | RHEL 8 | `vars/ansible-automation-platform-24/ee-casc-rhel8.yml` | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel8) |
-| Config as Code for AAP 2.4 | RHEL 9 | `vars/ansible-automation-platform-24/ee-casc-rhel9.yml` | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel9) |
-| Config as Code for AAP 2.5 | RHEL 8 | `vars/ansible-automation-platform-25/ee-casc-rhel8.yml` | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel8) |
-| Config as Code for AAP 2.5 | RHEL 9 | `vars/ansible-automation-platform-25/ee-casc-rhel9.yml` | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel9) |
-| Config as Code for AAP 2.6 | RHEL 9 | `vars/ansible-automation-platform-26/ee-casc-rhel9.yml` | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-26/ee-casc-rhel9) |
+| Purpose | OS Version | Var File | Public Repo |
+| :------ | :--------: | :------- | :---------: |
+| Config as Code for AAP 2.4 | RHEL 8 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel8.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel8) |
+| Config as Code for AAP 2.4 | RHEL 9 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel9) |
+| Config as Code for AAP 2.5 | RHEL 8 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel8.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel8) |
+| Config as Code for AAP 2.5 | RHEL 9 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel9) |
+| Config as Code for AAP 2.6 | RHEL 9 | [Link](vars/ansible-automation-platform-26/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-26/ee-casc-rhel9) |
 
 ## How It Works
 
