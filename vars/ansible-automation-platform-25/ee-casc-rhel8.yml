@@ -16,8 +16,8 @@ ee_bindep:
   - pkg-config [platform:rpm]
   - systemd-devel [platform:rpm]
   - gcc [platform:rpm]
-ee_python:
-  - yq
+# ee_python:
+#   - 
 ee_collections:
   - name: infra.aap_configuration
   - name: infra.aap_configuration_extended
@@ -27,7 +27,7 @@ ee_collections:
     version: "'>=2.5,<2.6'"
   - name: ansible.eda
   - name: ansible.hub
-  - name: community.general
+  # - name: community.general
 # ee_prepend_base:
 #   - RUN microdnf upgrade -y
 # ee_python_interpreter:
@@ -43,3 +43,4 @@ ee_append_final:
   - RUN microdnf reinstall tzdata -y
   - RUN rm -f /etc/ansible/ansible.cfg
   - RUN microdnf clean all
+  - RUN curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.47.2/yq_linux_amd64 && chmod +x /usr/local/bin/yq
