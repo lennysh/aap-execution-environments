@@ -103,7 +103,7 @@ The definitions for the execution environments are located in the `vars/` direct
 6.  Finally, it tags the new image with `latest` and a timestamp, and pushes both tags to the destination registry.
 
 ## Give credit where credit is due
-- My `build_ee` role is a tweaked version I got from [Alex Dworjan](https://github.com/adworjan)'s [repo here](https://github.com/shadowman-lab/Ansible-PAH).
+- My `build_ee` role is a tweaked version I got from [Alex Dworjan](https://github.com/adworjan)'s [repo here](https://github.com/shadowman-lab/Ansible-PAH). Please be sure to give him a shout out!
 
 ## License
 
