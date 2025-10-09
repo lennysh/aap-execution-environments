@@ -102,6 +102,9 @@ The definitions for the execution environments are located in the `vars/` direct
 5.  It runs the `ansible-builder build` command to create the container image.
 6.  Finally, it tags the new image with `latest` and a timestamp, and pushes both tags to the destination registry.
 
+## Give credit where credit is due
+- My `build_ee` role is a tweaked version I got from [Alex Dworjan](https://github.com/adworjan) from [his repo here](https://github.com/shadowman-lab/Ansible-PAH).
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
