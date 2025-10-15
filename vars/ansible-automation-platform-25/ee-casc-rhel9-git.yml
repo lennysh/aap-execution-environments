@@ -1,0 +1,54 @@
+---
+dest_registry_name: quay.io
+rhel_version: rhel9
+ansible_core_version: 2.16
+image_name: lshirley/ansible-automation-platform-25/ee-casc-{{ rhel_version | trim }}-git
+ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_package_manager_path: /usr/bin/microdnf
+# ee_python_interpreter:
+#  python_path: "/usr/bin/python3.11"
+ee_build_files:
+  - src: "{{ build_ee_dest_dir }}/ansible.cfg"
+    dest: configs
+ee_bindep:
+  - python3.11-devel [platform:rpm]
+  - pkg-config [platform:rpm]
+  - systemd-devel [platform:rpm]
+  - gcc [platform:rpm]
+# ee_python:
+#   - 
+ee_collections:
+  - name: https://github.com/redhat-cop/infra.aap_configuration.git       # infra.aap_configuration
+    type: git
+    version: devel
+  - name: https://github.com/redhat-cop/aap_configuration_extended.git    # infra.aap_configuration_extended
+    type: git
+    version: devel
+  - name: ansible.controller
+    version: "'>=4.6,<4.7'"
+  - name: https://github.com/ansible/ansible.platform.git                 # ansible.platform
+    type: git
+    version: stable-2.5
+  - name: https://github.com/ansible/event-driven-ansible.git             # ansible.eda
+    type: git
+    version: main
+  - name: https://github.com/ansible-collections/ansible_hub.git          # ansible.hub
+    type: git
+    version: main
+# ee_prepend_base:
+#   - RUN microdnf upgrade -y
+# ee_python_interpreter:
+#  package_system: "python310"
+#  python_path: "/usr/bin/python3.10"
+ee_prepend_galaxy:
+  - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
+# ee_prepend_builder:
+#   -
+# ee_prepend_final:
+#   -
+ee_append_final:
+  - RUN microdnf reinstall tzdata -y
+  - RUN rm -f /etc/ansible/ansible.cfg
+  - RUN microdnf clean all
+  - RUN curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.47.2/yq_linux_amd64 && chmod +x /usr/local/bin/yq

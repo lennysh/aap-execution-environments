@@ -84,14 +84,19 @@ The playbook will build the container image and push it to the destination regis
 
 The definitions for the execution environments are located in the `vars/` directory.
 
-| Purpose | Ansible Core | OS | Var File | Public Repo |
-| :------ | :----------: |:-: | :------: | :---------: |
-| Config as Code for AAP 2.4 | 2.16.x | RHEL 8 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel8.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel8) |
-| Config as Code for AAP 2.4 | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel9) |
-| Config as Code for AAP 2.5 | 2.16.x | RHEL 8 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel8.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel8) |
-| Config as Code for AAP 2.5 | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel9) |
-| Config as Code for AAP 2.6 | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-26/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-26/ee-casc-rhel9) |
-| Building ISO's | 2.15.x | RHEL 9 | [Link](vars/ee-xorriso-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ee-xorriso-rhel9) |
+| Name | Purpose | Notes | Ansible Core | OS | Var File | Public Repo |
+| :--- | :------ | :---- | :----------: |:-: | :------: | :---------: |
+| `ansible-automation-platform-24/ee-casc-rhel8-git` | Config as Code for AAP 2.4 | Collections pulled from Public Git Repos | 2.16.x | RHEL 8 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel8-git.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel8-git) |
+| `ansible-automation-platform-24/ee-casc-rhel8` | Config as Code for AAP 2.4 | Collections pulled from RH Console | 2.16.x | RHEL 8 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel8.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel8) |
+| `ansible-automation-platform-24/ee-casc-rhel9-git` | Config as Code for AAP 2.4 | Collections pulled from Public Git Repos | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel9-git.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel9-git) |
+| `ansible-automation-platform-24/ee-casc-rhel9` | Config as Code for AAP 2.4 | Collections pulled from RH Console | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-24/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-24/ee-casc-rhel9) |
+| `ansible-automation-platform-25/ee-casc-rhel8-git` | Config as Code for AAP 2.5 | Collections pulled from Public Git Repos | 2.16.x | RHEL 8 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel8-git.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel8-git) |
+| `ansible-automation-platform-25/ee-casc-rhel8` | Config as Code for AAP 2.5 | Collections pulled from RH Console | 2.16.x | RHEL 8 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel8.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel8) |
+| `ansible-automation-platform-25/ee-casc-rhel9-git` | Config as Code for AAP 2.5 | Collections pulled from Public Git Repos | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel9-git.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel9-git) |
+| `ansible-automation-platform-25/ee-casc-rhel9` | Config as Code for AAP 2.5 | Collections pulled from RH Console | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-25/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-25/ee-casc-rhel9) |
+| `ansible-automation-platform-26/ee-casc-rhel9-git` | Config as Code for AAP 2.6 | Collections pulled from Public Git Repos | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-26/ee-casc-rhel9-git.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-26/ee-casc-rhel9-git) |
+| `ansible-automation-platform-26/ee-casc-rhel9` | Config as Code for AAP 2.6 | Collections pulled from RH Console | 2.16.x | RHEL 9 | [Link](vars/ansible-automation-platform-26/ee-casc-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ansible-automation-platform-26/ee-casc-rhel9) |
+| `ee-xorriso-rhel9` | Building ISO's |  | 2.15.x | RHEL 9 | [Link](vars/ee-xorriso-rhel9.yml) | [Link](https://quay.io/repository/lshirley/ee-xorriso-rhel9) |
 
 ## How It Works
 
