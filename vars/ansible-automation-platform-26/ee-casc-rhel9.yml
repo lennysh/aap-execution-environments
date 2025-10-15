@@ -27,7 +27,6 @@ ee_collections:
     version: "'>=2.6,<2.7'"
   - name: ansible.eda
   - name: ansible.hub
-  # - name: community.general
 # ee_prepend_base:
 #   - RUN microdnf upgrade -y
 # ee_python_interpreter:

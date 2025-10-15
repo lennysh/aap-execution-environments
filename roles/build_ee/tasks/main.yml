@@ -71,31 +71,65 @@
         group: "{{ ansible_user_id }}"
         mode: '0644'
 
-- name: Create new tag on EE based on date time of creation
-  containers.podman.podman_tag:
-    image: "{{ dest_registry_name }}/{{ image_name }}"
-    target_names:
-      - "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}"
+- name: Only if pushing to remote registry
+  when:
+    - build_ee_push_to_registry | bool | default(true)
+  block:
+    - name: Create new tag on EE based on date time of creation
+      containers.podman.podman_tag:
+        image: "{{ dest_registry_name }}/{{ image_name }}"
+        target_names:
+          - "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}"
 
-- name: "Push new EE to: {{ dest_registry_name }}"
-  containers.podman.podman_image:
-    name: "{{ dest_registry_name }}/{{ image_name }}"
-    tag: "{{ item }}"
-    push: true
-    username: "{{ dest_registry_user }}"
-    password: "{{ dest_registry_pass }}"
-  loop:
-    - "{{ ansible_date_time.iso8601_basic_short }}"
-    - latest
+    - name: "Push new EE to: {{ dest_registry_name }}"
+      containers.podman.podman_image:
+        name: "{{ dest_registry_name }}/{{ image_name }}"
+        tag: "{{ item }}"
+        push: true
+        username: "{{ dest_registry_user }}"
+        password: "{{ dest_registry_pass }}"
+      loop:
+        - "{{ ansible_date_time.iso8601_basic_short }}"
+        - latest
 
-- name: Remove extra tag
-  containers.podman.podman_image:
-    name: "{{ dest_registry_name }}/{{ image_name }}"
-    tag: "{{ ansible_date_time.iso8601_basic_short }}"
-    state: absent
+    - name: Remove extra tag
+      containers.podman.podman_image:
+        name: "{{ dest_registry_name }}/{{ image_name }}"
+        tag: "{{ ansible_date_time.iso8601_basic_short }}"
+        state: absent
 
 # - name: Delete completed EE to free space
 #   containers.podman.podman_image:
 #     name: "{{ dest_registry_name }}/{{ image_name }}"
 #     state: absent
 #     force: true
+
+# - name: Update Ansible Extension Settings to Update EE with new Tag for code-server
+#   ansible.builtin.lineinfile:
+#     path: "/home/{{ ansible_user_id }}/.local/share/code-server/User/settings.json"
+#     search_string: '    "ansible.executionEnvironment.image"'
+#     line: '    "ansible.executionEnvironment.image": "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}",'
+#     owner: "{{ ansible_user_id }}"
+#     group: "{{ ansible_user_id }}"
+#     mode: '0644'
+#   become: true
+
+# - name: Update Ansible Extension Settings to Update EE with new Tag for VSCode
+#   ansible.builtin.lineinfile:
+#     path: "/home/{{ ansible_user_id }}/.vscode-server/data/Machine/settings.json"
+#     search_string: '    "ansible.executionEnvironment.image"'
+#     line: '    "ansible.executionEnvironment.image": "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}",'
+#     owner: "{{ ansible_user_id }}"
+#     group: root
+#     mode: '0644'
+#   become: true
+
+# - name: Update Ansible Navigator Settings to Update EE with new Tag
+#   ansible.builtin.lineinfile:
+#     path: "/home/{{ ansible_user_id }}/ansible/AnsibleGit/ansible-navigator.yml"
+#     search_string: '    image:'
+#     line: '    image: {{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}'
+#     owner: "{{ ansible_user_id }}"
+#     group: "{{ ansible_user_id }}"
+#     mode: '0664'
+#   become: true
