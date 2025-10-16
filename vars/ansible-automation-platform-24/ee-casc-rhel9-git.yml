@@ -43,4 +43,4 @@ ee_append_final:
   - RUN microdnf reinstall tzdata -y
   - RUN rm -f /etc/ansible/ansible.cfg
   - RUN microdnf clean all
-  - RUN curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.47.2/yq_linux_amd64 && chmod +x /usr/local/bin/yq
+  - RUN curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && chmod +x /usr/local/bin/yq
