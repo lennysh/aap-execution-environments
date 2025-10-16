@@ -3,3 +3,4 @@
 .ansible*
 ansible.cfg
 _build/
+*-custom.yml
