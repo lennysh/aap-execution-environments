@@ -19,7 +19,9 @@ ee_bindep:
 # ee_python:
 #   - 
 ee_collections:
-  - name: infra.controller_configuration
+  - name: https://github.com/redhat-cop/infra.controller_configuration.git  # infra.controller_configuration
+    type: git
+    version: devel
   - name: ansible.controller
     version: "'>=4.5.0,<4.6.0'"
   - name: https://github.com/ansible/event-driven-ansible.git             # ansible.eda

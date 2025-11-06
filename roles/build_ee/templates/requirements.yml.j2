@@ -12,7 +12,11 @@ roles:
 {%    if ee_collections|length %}
 collections:
 {% for item in ee_collections %}
+{% if item.name is defined %}
 - name: {{ item.name }}
+{% else %}
+- {{ item }}
+{% endif %}
 {% if item.type is defined %}
   type: {{ item.type }}
 {% endif %}
