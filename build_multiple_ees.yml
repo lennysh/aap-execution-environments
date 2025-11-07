@@ -1,0 +1,32 @@
+---
+- name: Build multiple EE's
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  tags: buildee
+  vars_files:
+    - "{{ playbook_dir }}/.vault.yml"
+
+  tasks:
+    - name: Include build_ee tasks file
+      vars:
+        execution_environments:
+          - "ansible-automation-platform/ee-proxmox-rhel9"
+          - "ansible-automation-platform/ee-unifi-rhel9"
+          - "ansible-automation-platform-24/ee-casc-rhel8"
+          - "ansible-automation-platform-24/ee-casc-rhel8-git"
+          - "ansible-automation-platform-24/ee-casc-rhel9"
+          - "ansible-automation-platform-24/ee-casc-rhel9-git"
+          - "ansible-automation-platform-25/ee-casc-rhel8"
+          - "ansible-automation-platform-25/ee-casc-rhel8-git"
+          - "ansible-automation-platform-25/ee-casc-rhel9"
+          - "ansible-automation-platform-25/ee-casc-rhel9-git"
+          - "ansible-automation-platform-26/ee-casc-rhel9"
+          - "ansible-automation-platform-26/ee-casc-rhel9-git"
+          - "ee-xorriso-rhel9"
+      loop: "{{ execution_environments }}"
+      loop_control:
+        loop_var: execution_environment
+      ansible.builtin.include_tasks:
+        file: tasks/build_ee.yml
+...
