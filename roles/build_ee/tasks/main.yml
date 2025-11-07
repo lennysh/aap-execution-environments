@@ -48,6 +48,7 @@
     - requirements.yml
 
 - name: "Block: ansible-builder"
+  when: build_ee | default(true) | bool
   block:
     - name: Build new EE on version 1 without signature verification
       ansible.builtin.command:
@@ -77,7 +78,7 @@
 
 - name: Only if pushing to remote registry
   when:
-    - build_ee_push_to_registry | bool | default(true)
+    - build_ee_push_to_registry | default(true) | bool
   block:
     - name: "{{ __task_name }}"
       vars:

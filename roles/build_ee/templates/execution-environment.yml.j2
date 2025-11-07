@@ -1,6 +1,5 @@
 ---
 version: {{ build_ee_version }}
-
 {% if ( (galaxy_cli_opts is defined) or
         ( (ee_base_image is defined or ee_builder_image is defined) and
         build_ee_version == 1 ) ) %}
@@ -23,11 +22,9 @@ build_arg_defaults:
 {%    endif %}
 {% endif %}
 {% endif %}
-
 {% if ansible_config is defined %}
 ansible_config: '{{ ansible_config }}'
 {% endif %}
-
 {% if (ee_bindep is defined and ee_bindep|length ) or
       (ee_ansible_core is defined and ee_ansible_core|length ) or 
       (ee_ansible_runner is defined and ee_ansible_runner|length ) or 
@@ -84,7 +81,6 @@ dependencies:
 {%      endif %}
 {% endif %}
 {% endif %}
-
 {% if ee_build_files is defined %}
 {%    if ee_build_files|length %}
 additional_build_files:
@@ -94,7 +90,6 @@ additional_build_files:
 {% endfor %}
 {%    endif %}
 {%    endif %}
-
 {% if build_ee_version == 1 or build_ee_version == 2 %}
 {% if (ee_prepend is defined and ee_prepend|length) or (ee_append is defined and ee_append|length) %}
 additional_build_steps:
@@ -161,7 +156,6 @@ additional_build_steps:
 {% endfor %}
 {% endif %}
 {% endif %}
-
 {% if ee_container_init is defined or
       ee_package_manager_path is defined or
       ee_skip_ansible_check is defined or
@@ -192,7 +186,6 @@ options:
 {% endif %}
 {% endif %}
 {% endif %}
-
 {% if build_ee_version == 2 or  build_ee_version == 3%}
 {% if (ee_base_image is defined) or (ee_builder_image is defined) %}
 images:
