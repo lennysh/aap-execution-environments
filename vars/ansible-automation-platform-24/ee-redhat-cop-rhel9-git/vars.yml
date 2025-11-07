@@ -10,7 +10,7 @@ ee_package_manager_path: /usr/bin/microdnf
 #  package_system: "python310"
 #  python_path: "/usr/bin/python3.11"
 ee_build_files:
-  - src: "{{ build_ee_dest_dir }}/ansible.cfg"
+  - src: "ansible.cfg"
     dest: configs
   - src: /home/lshirley/Syncthing/Git_Repos/github.com_lennysh/lennysh-aap_credentials/lennysh-aap_credentials-0.1.0-devel.tar.gz
     dest: collections

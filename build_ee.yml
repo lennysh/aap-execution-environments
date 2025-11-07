@@ -17,7 +17,7 @@
 
     - name: Override build path (so I can push to git repo)
       ansible.builtin.set_fact:
-        build_ee_dest_dir: "./vars/{{ ee_vars_folder }}/__build"
+        build_ee_dest_dir: "vars/{{ ee_vars_folder }}/__build"
 
     - name: "Include EE vars: {{ ee_vars_folder | basename }}"
       ansible.builtin.include_vars:

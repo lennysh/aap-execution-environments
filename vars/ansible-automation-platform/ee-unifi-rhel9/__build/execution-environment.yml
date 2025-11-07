@@ -8,7 +8,7 @@ dependencies:
   system: bindep.txt
 
 additional_build_files:
-  - src: /home/lshirley/Syncthing/Git_Repos/github.com_lennysh/lennysh-aap-execution-environments/_build//ansible.cfg
+  - src: ansible.cfg
     dest: configs
 
 additional_build_steps:

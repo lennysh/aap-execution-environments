@@ -10,7 +10,7 @@ ee_package_manager_path: /usr/bin/microdnf
 #  package_system: "python310"
 #  python_path: "/usr/bin/python3.11"
 ee_build_files:
-  - src: "{{ build_ee_dest_dir }}/ansible.cfg"
+  - src: "ansible.cfg"
     dest: configs
 ee_bindep:
   - python3.11-devel [platform:rpm]

@@ -11,7 +11,7 @@ ee_ansible_runner: ansible-runner
 #  package_system: "python310"
 #  python_path: "/usr/bin/python3.11"
 # ee_build_files:
-#   - src: "{{ build_ee_dest_dir }}/ansible.cfg"
+#   - src: "ansible.cfg"
 #     dest: configs
 # ee_bindep:
 #   - xorriso [platform:rpm]
