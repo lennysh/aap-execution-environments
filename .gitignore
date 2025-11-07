@@ -1,6 +1,7 @@
 .keyring*
 .vault*
 .ansible*
-ansible.cfg
-_build/
-*-custom.yml
+**/ansible.cfg
+**/*.log
+**/__build/context
+**/*-custom/

@@ -36,7 +36,7 @@
 - name: Template out builder files
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "{{ build_ee_dest_dir }}{{ item }}"
+    dest: "{{ build_ee_dest_dir }}/{{ item }}"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     mode: '0644'

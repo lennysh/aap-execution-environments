@@ -1,5 +1,4 @@
 ---
-
 - name: Build new EE
   hosts: localhost
   connection: local
@@ -12,13 +11,17 @@
     - name: Assert that needed vars are supplied
       ansible.builtin.assert:
         that:
-          - ee_vars_file is defined
-          - ee_vars_file | length > 0
-        fail_msg: "You must define ee_vars_file!"
+          - ee_vars_folder is defined
+          - ee_vars_folder | length > 0
+        fail_msg: "You must define ee_vars_folder!"
 
-    - name: "Include EE vars: {{ ee_vars_file | basename }}"
+    - name: Override build path (so I can push to git repo)
+      ansible.builtin.set_fact:
+        build_ee_dest_dir: "./vars/{{ ee_vars_folder }}/__build"
+
+    - name: "Include EE vars: {{ ee_vars_folder | basename }}"
       ansible.builtin.include_vars:
-        file: "{{ ee_vars_file }}"
+        file: "vars/{{ ee_vars_folder }}/vars.yml"
 
   roles:
     - build_ee
