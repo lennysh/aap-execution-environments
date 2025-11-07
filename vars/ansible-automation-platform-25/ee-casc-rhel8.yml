@@ -7,6 +7,7 @@ ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel
 ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
 ee_package_manager_path: /usr/bin/microdnf
 # ee_python_interpreter:
+#  package_system: "python310"
 #  python_path: "/usr/bin/python3.11"
 ee_build_files:
   - src: "{{ build_ee_dest_dir }}/ansible.cfg"
@@ -29,9 +30,6 @@ ee_collections:
   - name: ansible.hub
 # ee_prepend_base:
 #   - RUN microdnf upgrade -y
-# ee_python_interpreter:
-#  package_system: "python310"
-#  python_path: "/usr/bin/python3.10"
 ee_prepend_galaxy:
   - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
 # ee_prepend_builder:

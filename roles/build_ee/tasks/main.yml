@@ -1,4 +1,8 @@
 ---
+- name: Set some facts
+  ansible.builtin.set_fact:
+    __image_full_name: "{{ dest_registry_name }}/{{ image_name }}"
+
 - name: Pull builder images
   containers.podman.podman_image:
     name: "{{ item }}"
@@ -10,9 +14,9 @@
     # - "{{ ee_builder_image }}"
   when: build_ee_version == 1
 
-- name: "Delete old EE: {{ dest_registry_name }}/{{ image_name }}"
+- name: "Delete old EE: {{ __image_full_name }}"
   containers.podman.podman_image:
-    name: "{{ dest_registry_name }}/{{ image_name }}"
+    name: "{{ __image_full_name }}"
     state: absent
     force: true
 
@@ -47,7 +51,7 @@
   block:
     - name: Build new EE on version 1 without signature verification
       ansible.builtin.command:
-        cmd: 'ansible-builder build -t {{ dest_registry_name }}/{{ image_name }} --prune-images'
+        cmd: 'ansible-builder build -vvv -t {{ __image_full_name }}:{{ ee_build_tag | default("latest") }} --prune-images'
         chdir: "{{ build_ee_dest_dir }}"
       changed_when: true
       when: build_ee_version == 1
@@ -55,7 +59,7 @@
 
     - name: Build new EE with container signature verification on version 2 or 3
       ansible.builtin.command:
-        cmd: 'ansible-builder build -vvv -t {{ dest_registry_name }}/{{ image_name }} --prune-images --container-policy=system --squash=new'
+        cmd: 'ansible-builder build -vvv -t {{ __image_full_name }}:{{ ee_build_tag | default("latest") }} --prune-images --container-policy=system --squash=new'
         chdir: "{{ build_ee_dest_dir }}"
       changed_when: true
       when: build_ee_version == 2 or build_ee_version == 3
@@ -75,61 +79,46 @@
   when:
     - build_ee_push_to_registry | bool | default(true)
   block:
-    - name: Create new tag on EE based on date time of creation
-      containers.podman.podman_tag:
-        image: "{{ dest_registry_name }}/{{ image_name }}"
-        target_names:
-          - "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}"
-
-    - name: "Push new EE to: {{ dest_registry_name }}"
+    - name: "{{ __task_name }}"
+      vars:
+        __task_name: "Push new EE to: {{ dest_registry_name }}, tag: {{ ee_build_tag | default('latest') }}"
       containers.podman.podman_image:
-        name: "{{ dest_registry_name }}/{{ image_name }}"
-        tag: "{{ item }}"
+        name: "{{ __image_full_name }}"
+        tag: "{{ ee_build_tag | default('latest') }}"
         push: true
         username: "{{ dest_registry_user }}"
         password: "{{ dest_registry_pass }}"
-      loop:
-        - "{{ ansible_date_time.iso8601_basic_short }}"
-        - latest
 
-    - name: Remove extra tag
-      containers.podman.podman_image:
-        name: "{{ dest_registry_name }}/{{ image_name }}"
-        tag: "{{ ansible_date_time.iso8601_basic_short }}"
-        state: absent
+    - name: Only if pushing with datetime/tag
+      vars:
+        __datetime_tag: "{{ ansible_date_time.iso8601_basic_short }}"
+      when:
+        - ee_registry_add_timestamp_tag | default(true)
+      block:
+        - name: Create new tag on EE based on date time of creation
+          containers.podman.podman_tag:
+            image: "{{ __image_full_name }}"
+            target_names:
+              - "{{ __image_full_name }}:{{ __datetime_tag }}"
+
+        - name: "{{ __task_name }}"
+          vars:
+            __task_name: "Push new EE to: {{ dest_registry_name }}, tag: {{ ee_build_tag | default('latest') }}"
+          containers.podman.podman_image:
+            name: "{{ __image_full_name }}"
+            tag: "{{ __datetime_tag }}"
+            push: true
+            username: "{{ dest_registry_user }}"
+            password: "{{ dest_registry_pass }}"
+
+        - name: Remove extra tag
+          containers.podman.podman_image:
+            name: "{{ __image_full_name }}"
+            tag: "{{ __datetime_tag }}"
+            state: absent
 
 # - name: Delete completed EE to free space
 #   containers.podman.podman_image:
-#     name: "{{ dest_registry_name }}/{{ image_name }}"
+#     name: "{{ __image_full_name }}"
 #     state: absent
 #     force: true
-
-# - name: Update Ansible Extension Settings to Update EE with new Tag for code-server
-#   ansible.builtin.lineinfile:
-#     path: "/home/{{ ansible_user_id }}/.local/share/code-server/User/settings.json"
-#     search_string: '    "ansible.executionEnvironment.image"'
-#     line: '    "ansible.executionEnvironment.image": "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}",'
-#     owner: "{{ ansible_user_id }}"
-#     group: "{{ ansible_user_id }}"
-#     mode: '0644'
-#   become: true
-
-# - name: Update Ansible Extension Settings to Update EE with new Tag for VSCode
-#   ansible.builtin.lineinfile:
-#     path: "/home/{{ ansible_user_id }}/.vscode-server/data/Machine/settings.json"
-#     search_string: '    "ansible.executionEnvironment.image"'
-#     line: '    "ansible.executionEnvironment.image": "{{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}",'
-#     owner: "{{ ansible_user_id }}"
-#     group: root
-#     mode: '0644'
-#   become: true
-
-# - name: Update Ansible Navigator Settings to Update EE with new Tag
-#   ansible.builtin.lineinfile:
-#     path: "/home/{{ ansible_user_id }}/ansible/AnsibleGit/ansible-navigator.yml"
-#     search_string: '    image:'
-#     line: '    image: {{ dest_registry_name }}/{{ image_name }}:{{ ansible_date_time.iso8601_basic_short }}'
-#     owner: "{{ ansible_user_id }}"
-#     group: "{{ ansible_user_id }}"
-#     mode: '0664'
-#   become: true
