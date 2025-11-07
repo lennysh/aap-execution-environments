@@ -5,19 +5,12 @@ dependencies:
       package_pip: ansible-core==2.15
   ansible_runner:
       package_pip: ansible-runner
-  galaxy: requirements.yml
   python: requirements.txt
-  system: bindep.txt
-additional_build_files:
-  - src: ansible.cfg
-    dest: configs
 additional_build_steps:
   prepend_base:
-    - RUN subscription-manager register --activationkey=lshirley-rhel-server-self-support-dev --org=11009103
+    - RUN subscription-manager register --activationkey={{ rhel_activationkey }} --org={{ rhel_org }}
   append_base:
     - RUN dnf install -y xorriso
-  prepend_galaxy:
-    - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
   append_final:
     - RUN dnf clean all && rm -rf /var/cache/yum
     - RUN subscription-manager unregister

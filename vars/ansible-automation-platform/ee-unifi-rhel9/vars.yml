@@ -1,12 +1,10 @@
 ---
-dest_registry_name: quay.io
-rhel_version: rhel9
-ansible_core_version: 2.17
+ee_dest_registry_name: quay.io
 ee_build_tag: 2.17 # defaults to latest
 ee_registry_add_timestamp_tag: false # defaults to true
-image_name: lshirley/ansible-automation-platform/ee-unifi-{{ rhel_version | trim }}
-ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
-ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_image_name: lshirley/ansible-automation-platform/ee-unifi-rhel9
+ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-rhel9:2.17
+ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-rhel9:2.17
 ee_package_manager_path: /usr/bin/microdnf
 # ee_python_interpreter:
 #  package_system: "python310"

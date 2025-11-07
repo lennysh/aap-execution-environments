@@ -1,10 +1,8 @@
 ---
-dest_registry_name: quay.io
-rhel_version: rhel9
-ansible_core_version: 2.16
-image_name: lshirley/ansible-automation-platform-25/ee-casc-{{ rhel_version | trim }}-git
-ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
-ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_dest_registry_name: quay.io
+ee_image_name: lshirley/ansible-automation-platform-25/ee-casc-rhel9-git
+ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-rhel9:2.16
+ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-rhel9:2.16
 ee_package_manager_path: /usr/bin/microdnf
 # ee_python_interpreter:
 #  package_system: "python310"
