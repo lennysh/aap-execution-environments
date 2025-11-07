@@ -1,7 +1,12 @@
 ---
+- name: "Include EE vars: {{ execution_environment | basename }}"
+  ansible.builtin.include_vars:
+    file: "{{ playbook_dir }}/vars/{{ execution_environment }}/vars.yml"
+    name: "{{ build_ee_main_var_name }}"
+
 - name: Set some facts
   ansible.builtin.set_fact:
-    __image_full_name: "{{ dest_registry_name }}/{{ image_name }}"
+    __image_full_name: "{{ vars[build_ee_main_var_name].ee_dest_registry_name }}/{{ vars[build_ee_main_var_name].ee_image_name }}"
 
 - name: Pull builder images
   containers.podman.podman_image:
@@ -10,7 +15,7 @@
     password: "{{ registry_pass }}"
     force: true
   loop:
-    - "{{ ee_base_image }}"
+    - "{{ vars[build_ee_main_var_name].ee_base_image }}"
     # - "{{ ee_builder_image }}"
   when: build_ee_version == 1
 
@@ -20,7 +25,7 @@
     state: absent
     force: true
 
-- name: Make sure dest dir exists
+- name: "Make sure dest dir exists: {{ build_ee_dest_dir }}"
   ansible.builtin.file:
     name: "{{ build_ee_dest_dir }}"
     state: directory
@@ -30,10 +35,18 @@
 
 - name: Clean out previous runs
   ansible.builtin.file:
-    name: "{{ build_ee_dest_dir }}/context"
+    name: "{{ build_ee_dest_dir }}"
     state: absent
 
+- name: Re-create local build folder
+  ansible.builtin.file:
+    name: "{{ build_ee_dest_dir }}"
+    state: directory
+    mode: "0755"
+
 - name: Template out builder files
+  vars:
+    __ee: "{{ vars[build_ee_main_var_name] }}"
   ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ build_ee_dest_dir }}/{{ item }}"
@@ -52,7 +65,7 @@
   block:
     - name: Build new EE on version 1 without signature verification
       ansible.builtin.command:
-        cmd: 'ansible-builder build -vvv -t {{ __image_full_name }}:{{ ee_build_tag | default("latest") }} --prune-images'
+        cmd: 'ansible-builder build -vvv -t {{ __image_full_name }}:{{ vars[build_ee_main_var_name].ee_build_tag | default("latest") }} --prune-images'
         chdir: "{{ build_ee_dest_dir }}"
       changed_when: true
       when: build_ee_version == 1
@@ -60,7 +73,7 @@
 
     - name: Build new EE with container signature verification on version 2 or 3
       ansible.builtin.command:
-        cmd: 'ansible-builder build -vvv -t {{ __image_full_name }}:{{ ee_build_tag | default("latest") }} --prune-images --container-policy=system --squash=new'
+        cmd: 'ansible-builder build -vvv -t {{ __image_full_name }}:{{ vars[build_ee_main_var_name].ee_build_tag | default("latest") }} --prune-images --container-policy=system --squash=new'
         chdir: "{{ build_ee_dest_dir }}"
       changed_when: true
       when: build_ee_version == 2 or build_ee_version == 3
@@ -82,10 +95,10 @@
   block:
     - name: "{{ __task_name }}"
       vars:
-        __task_name: "Push new EE to: {{ dest_registry_name }}, tag: {{ ee_build_tag | default('latest') }}"
+        __task_name: "Push new EE to: {{ vars[build_ee_main_var_name].ee_dest_registry_name }}, tag: {{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}"
       containers.podman.podman_image:
         name: "{{ __image_full_name }}"
-        tag: "{{ ee_build_tag | default('latest') }}"
+        tag: "{{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}"
         push: true
         username: "{{ dest_registry_user }}"
         password: "{{ dest_registry_pass }}"
@@ -94,7 +107,7 @@
       vars:
         __datetime_tag: "{{ ansible_date_time.iso8601_basic_short }}"
       when:
-        - ee_registry_add_timestamp_tag | default(true)
+        - vars[build_ee_main_var_name].ee_registry_add_timestamp_tag | default(true)
       block:
         - name: Create new tag on EE based on date time of creation
           containers.podman.podman_tag:
@@ -104,7 +117,7 @@
 
         - name: "{{ __task_name }}"
           vars:
-            __task_name: "Push new EE to: {{ dest_registry_name }}, tag: {{ ee_build_tag | default('latest') }}"
+            __task_name: "Push new EE to: {{ vars[build_ee_main_var_name].ee_dest_registry_name }}, tag: {{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}"
           containers.podman.podman_image:
             name: "{{ __image_full_name }}"
             tag: "{{ __datetime_tag }}"

@@ -1,7 +1,7 @@
 ---
 version: {{ build_ee_version }}
 {% if ( (galaxy_cli_opts is defined) or
-        ( (ee_base_image is defined or ee_builder_image is defined) and
+        ( (__ee.ee_base_image is defined or __ee.ee_builder_image is defined) and
         build_ee_version == 1 ) ) %}
 build_arg_defaults:
 {% if galaxy_cli_opts is defined %}
@@ -11,200 +11,200 @@ build_arg_defaults:
 {% endif %}
 {% endif %}
 {% if build_ee_version == 1 %}
-{% if ee_base_image is defined %}
-{%    if ee_base_image|length %}
-  EE_BASE_IMAGE: {{ ee_base_image }}
+{% if __ee.ee_base_image is defined %}
+{%    if __ee.ee_base_image|length %}
+  EE_BASE_IMAGE: {{ __ee.ee_base_image }}
 {%    endif %}
 {% endif %}
-{% if ee_builder_image is defined %}
-{%    if ee_builder_image|length %}
-  EE_BUILDER_IMAGE: {{ ee_builder_image }}
+{% if __ee.ee_builder_image is defined %}
+{%    if __ee.ee_builder_image|length %}
+  EE_BUILDER_IMAGE: {{ __ee.ee_builder_image }}
 {%    endif %}
 {% endif %}
 {% endif %}
 {% if ansible_config is defined %}
 ansible_config: '{{ ansible_config }}'
 {% endif %}
-{% if (ee_bindep is defined and ee_bindep|length ) or
-      (ee_ansible_core is defined and ee_ansible_core|length ) or 
-      (ee_ansible_runner is defined and ee_ansible_runner|length ) or 
-      (ee_python_interpreter is defined and ee_python_interpreter|length ) or 
-        (ee_python is defined and ee_python|length ) or
-        (ee_collections is defined and ee_collections|length) or
-        (ee_exclude_system is defined and ee_exclude_system|length) %}
+{% if (__ee.ee_bindep is defined and __ee.ee_bindep|length ) or
+      (__ee.ee_ansible_core is defined and __ee.ee_ansible_core|length ) or 
+      (__ee.ee_ansible_runner is defined and __ee.ee_ansible_runner|length ) or 
+      (__ee.ee_python_interpreter is defined and __ee.ee_python_interpreter|length ) or 
+        (__ee.ee_python is defined and __ee.ee_python|length ) or
+        (__ee.ee_collections is defined and __ee.ee_collections|length) or
+        (__ee.ee_exclude_system is defined and __ee.ee_exclude_system|length) %}
 dependencies:
-{% if ee_ansible_core is defined %}
-{%      if ee_ansible_core|length %}
+{% if __ee.ee_ansible_core is defined %}
+{%      if __ee.ee_ansible_core|length %}
   ansible_core:
-      package_pip: {{ ee_ansible_core }}
+      package_pip: {{ __ee.ee_ansible_core }}
 {%      endif %}
 {% endif %}
-{% if ee_ansible_runner is defined %}
-{%      if ee_ansible_runner|length %}
+{% if __ee.ee_ansible_runner is defined %}
+{%      if __ee.ee_ansible_runner|length %}
   ansible_runner:
-      package_pip: {{ ee_ansible_runner }}
+      package_pip: {{ __ee.ee_ansible_runner }}
 {%      endif %}
 {% endif %}
-{% if ee_python_interpreter.package_system is defined or ee_python_interpreter.python_path is defined %}
-{%      if ee_python_interpreter|length %}
+{% if __ee.ee_python_interpreter.package_system is defined or __ee.ee_python_interpreter.python_path is defined %}
+{%      if __ee.ee_python_interpreter|length %}
   python_interpreter:
-{% if ee_python_interpreter.package_system is defined %}
-      package_system: {{ ee_python_interpreter.package_system }}
+{% if __ee.ee_python_interpreter.package_system is defined %}
+      package_system: {{ __ee.ee_python_interpreter.package_system }}
 {% endif %}
-{% if ee_python_interpreter.python_path is defined %}
-      python_path: {{ ee_python_interpreter.python_path }}
+{% if __ee.ee_python_interpreter.python_path is defined %}
+      python_path: {{ __ee.ee_python_interpreter.python_path }}
 {% endif %}
 {%      endif %}
 {% endif %}
-{% if ee_collections is defined %}
-{%      if ee_collections|length %}
+{% if __ee.ee_collections is defined %}
+{%      if __ee.ee_collections|length %}
   galaxy: {{ build_ee_galaxy_requirements_file }}
 {%      endif %}
 {% endif %}
-{% if ee_python is defined %}
-{%      if ee_python|length %}
+{% if __ee.ee_python is defined %}
+{%      if __ee.ee_python|length %}
   python: {{ build_ee_python_requirements_file }}
 {%      endif %}
 {% endif %}
-{% if ee_bindep is defined %}
-{%      if ee_bindep|length %}
+{% if __ee.ee_bindep is defined %}
+{%      if __ee.ee_bindep|length %}
   system: {{ build_ee_bindep_file }}
 {%      endif %}
 {% endif %}
-{% if ee_exclude_system is defined %}
-{%      if ee_exclude_system|length %}
+{% if __ee.ee_exclude_system is defined %}
+{%      if __ee.ee_exclude_system|length %}
   exclude:
     system:
-{% for item in ee_exclude_system %}
+{% for item in __ee.ee_exclude_system %}
       - {{ item }}
 {% endfor %}
 {%      endif %}
 {% endif %}
 {% endif %}
-{% if ee_build_files is defined %}
-{%    if ee_build_files|length %}
+{% if __ee.ee_build_files is defined %}
+{%    if __ee.ee_build_files|length %}
 additional_build_files:
-{% for item in ee_build_files %}
+{% for item in __ee.ee_build_files %}
   - src: {{ item.src }}
     dest: {{ item.dest }}
 {% endfor %}
 {%    endif %}
 {%    endif %}
 {% if build_ee_version == 1 or build_ee_version == 2 %}
-{% if (ee_prepend is defined and ee_prepend|length) or (ee_append is defined and ee_append|length) %}
+{% if (__ee.ee_prepend is defined and __ee.ee_prepend|length) or (__ee.ee_append is defined and __ee.ee_append|length) %}
 additional_build_steps:
-{% if (ee_prepend is defined and ee_prepend|length) %}  prepend: 
-{% for item in ee_prepend %}
+{% if (__ee.ee_prepend is defined and __ee.ee_prepend|length) %}  prepend: 
+{% for item in __ee.ee_prepend %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_append is defined and ee_append|length) %}  append: 
-{% for item in ee_append %}
+{% if (__ee.ee_append is defined and __ee.ee_append|length) %}  append: 
+{% for item in __ee.ee_append %}
     - {{ item }}
 {% endfor %}
 {% endif %}
 {% endif %}
 {% endif %}
 {% if build_ee_version == 3 %}
-{% if (ee_prepend_base is defined and ee_prepend_base|length) or 
-      (ee_append_base is defined and ee_append_base|length) or
-      (ee_prepend_galaxy is defined and ee_prepend_galaxy|length) or 
-      (ee_append_galaxy is defined and ee_append_galaxy|length) or
-      (ee_prepend_builder is defined and ee_prepend_builder|length) or 
-      (ee_append_builder is defined and ee_append_builder|length) or
-      (ee_prepend_final is defined and ee_prepend_final|length) or 
-      (ee_append_final is defined and ee_append_final|length)  %}
+{% if (__ee.ee_prepend_base is defined and __ee.ee_prepend_base|length) or 
+      (__ee.ee_append_base is defined and __ee.ee_append_base|length) or
+      (__ee.ee_prepend_galaxy is defined and __ee.ee_prepend_galaxy|length) or 
+      (__ee.ee_append_galaxy is defined and __ee.ee_append_galaxy|length) or
+      (__ee.ee_prepend_builder is defined and __ee.ee_prepend_builder|length) or 
+      (__ee.ee_append_builder is defined and __ee.ee_append_builder|length) or
+      (__ee.ee_prepend_final is defined and __ee.ee_prepend_final|length) or 
+      (__ee.ee_append_final is defined and __ee.ee_append_final|length)  %}
 additional_build_steps:
-{% if (ee_prepend_base is defined and ee_prepend_base|length) %}  prepend_base:
-{% for item in ee_prepend_base %}
+{% if (__ee.ee_prepend_base is defined and __ee.ee_prepend_base|length) %}  prepend_base:
+{% for item in __ee.ee_prepend_base %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_append_base is defined and ee_append_base|length) %}  append_base:
-{% for item in ee_append_base %}
+{% if (__ee.ee_append_base is defined and __ee.ee_append_base|length) %}  append_base:
+{% for item in __ee.ee_append_base %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_prepend_galaxy is defined and ee_prepend_galaxy|length) %}  prepend_galaxy:
-{% for item in ee_prepend_galaxy %}
+{% if (__ee.ee_prepend_galaxy is defined and __ee.ee_prepend_galaxy|length) %}  prepend_galaxy:
+{% for item in __ee.ee_prepend_galaxy %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_append_galaxy is defined and ee_append_galaxy|length) %}  append_galaxy:
-{% for item in ee_append_galaxy %}
+{% if (__ee.ee_append_galaxy is defined and __ee.ee_append_galaxy|length) %}  append_galaxy:
+{% for item in __ee.ee_append_galaxy %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_prepend_builder is defined and ee_prepend_builder|length) %}  prepend_builder:
-{% for item in ee_prepend_builder %}
+{% if (__ee.ee_prepend_builder is defined and __ee.ee_prepend_builder|length) %}  prepend_builder:
+{% for item in __ee.ee_prepend_builder %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_append_builder is defined and ee_append_builder|length) %}  append_builder:
-{% for item in ee_append_builder %}
+{% if (__ee.ee_append_builder is defined and __ee.ee_append_builder|length) %}  append_builder:
+{% for item in __ee.ee_append_builder %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_prepend_final is defined and ee_prepend_final|length) %}  prepend_final:
-{% for item in ee_prepend_final %}
+{% if (__ee.ee_prepend_final is defined and __ee.ee_prepend_final|length) %}  prepend_final:
+{% for item in __ee.ee_prepend_final %}
     - {{ item }}
 {% endfor %}
 {% endif %}
-{% if (ee_append_final is defined and ee_append_final|length) %}  append_final:
-{% for item in ee_append_final %}
+{% if (__ee.ee_append_final is defined and __ee.ee_append_final|length) %}  append_final:
+{% for item in __ee.ee_append_final %}
     - {{ item }}
 {% endfor %}
 {% endif %}
 {% endif %}
-{% if ee_container_init is defined or
-      ee_package_manager_path is defined or
-      ee_skip_ansible_check is defined or
-      ee_relax_passwd_permissions is defined or
-      ee_workdir is defined or
-      ee_user is defined  %}
+{% if __ee.ee_container_init is defined or
+      __ee.ee_package_manager_path is defined or
+      __ee.ee_skip_ansible_check is defined or
+      __ee.ee_relax_passwd_permissions is defined or
+      __ee.ee_workdir is defined or
+      __ee.ee_user is defined  %}
 options:
-{% if ee_container_init is defined %}
+{% if __ee.ee_container_init is defined %}
   container_init:
-    package_pip: ee_container_init.package_pip
-    entrypoint: ee_container_init.entrypoint
-    cmd: ee_container_init.cmd
+    package_pip: __ee.ee_container_init.package_pip
+    entrypoint: __ee.ee_container_init.entrypoint
+    cmd: __ee.ee_container_init.cmd
 {% endif %}
-{% if ee_package_manager_path is defined %}
-  package_manager_path: {{ ee_package_manager_path }}
+{% if __ee.ee_package_manager_path is defined %}
+  package_manager_path: {{ __ee.ee_package_manager_path }}
 {% endif %}
-{% if ee_skip_ansible_check is defined %}
-  skip_ansible_check: {{ ee_skip_ansible_check }}
+{% if __ee.ee_skip_ansible_check is defined %}
+  skip_ansible_check: {{ __ee.ee_skip_ansible_check }}
 {% endif %}
-{% if ee_relax_passwd_permissions is defined %}
-  relax_passwd_permissions: {{ ee_relax_passwd_permissions }}
+{% if __ee.ee_relax_passwd_permissions is defined %}
+  relax_passwd_permissions: {{ __ee.ee_relax_passwd_permissions }}
 {% endif %}
-{% if ee_workdir is defined %}
-  workdir: {{ ee_workdir }}
+{% if __ee.ee_workdir is defined %}
+  workdir: {{ __ee.ee_workdir }}
 {% endif %}
-{% if ee_user is defined %}
-  user: {{ ee_user }}
+{% if __ee.ee_user is defined %}
+  user: {{ __ee.ee_user }}
 {% endif %}
 {% endif %}
 {% endif %}
 {% if build_ee_version == 2 or  build_ee_version == 3%}
-{% if (ee_base_image is defined) or (ee_builder_image is defined) %}
+{% if (__ee.ee_base_image is defined) or (__ee.ee_builder_image is defined) %}
 images:
-  {%- if ee_base_image is defined %}
+  {%- if __ee.ee_base_image is defined %}
 
   base_image:
-    name: {{ ee_base_image }}
-    {%- if ee_base_sig_name is defined %}
+    name: {{ __ee.ee_base_image }}
+    {%- if __ee.ee_base_sig_name is defined %}
 
-    signature_original_name: {{ ee_base_sig_name }}
+    signature_original_name: {{ __ee.ee_base_sig_name }}
     {%- endif %}
   {%- endif %}
-  {%- if ee_builder_image is defined %}
+  {%- if __ee.ee_builder_image is defined %}
 
   builder_image:
-    name: {{ ee_builder_image }}
-    {%- if ee_builder_sig_name is defined %}
+    name: {{ __ee.ee_builder_image }}
+    {%- if __ee.ee_builder_sig_name is defined %}
 
-    signature_original_name: {{ ee_builder_sig_name }}
+    signature_original_name: {{ __ee.ee_builder_sig_name }}
     {%- endif %}
   {%- endif %}
 {% endif %}

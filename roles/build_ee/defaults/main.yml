@@ -5,3 +5,5 @@ build_ee_bindep_file: bindep.txt
 build_ee_python_requirements_file: requirements.txt
 build_ee_galaxy_requirements_file: requirements.yml
 build_ee_push_to_registry: true
+build_ee_main_var_name: ee_vars
+...

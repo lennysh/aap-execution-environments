@@ -1,13 +1,11 @@
 ---
 - name: Override build path (so I can push to git repo)
   ansible.builtin.set_fact:
-    build_ee_dest_dir: "vars/{{ execution_environment }}/__build"
+    build_ee_dest_dir: "{{ playbook_dir }}/vars/{{ execution_environment }}/__build"
 
-- name: "Include EE vars: {{ execution_environment | basename }}"
-  ansible.builtin.include_vars:
-    file: "vars/{{ execution_environment }}/vars.yml"
-
-- name: "Build Ecxecution Environment"
+- name: "Build Execution Environment"
+  vars:
+    build_ee_main_var_name: "vars_for_loop_{{ ee_idx }}"
   ansible.builtin.import_role:
     name: build_ee
 ...
