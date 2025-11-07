@@ -8,6 +8,7 @@ ee_package_manager_path: /usr/bin/dnf
 ee_ansible_core: "ansible-core=={{ ansible_core_version }}"
 ee_ansible_runner: ansible-runner
 # ee_python_interpreter:
+#  package_system: "python310"
 #  python_path: "/usr/bin/python3.11"
 # ee_build_files:
 #   - src: "{{ build_ee_dest_dir }}/ansible.cfg"
@@ -22,9 +23,6 @@ ee_prepend_base:
   - RUN subscription-manager register --activationkey={{ rhel_activationkey }} --org={{ rhel_org }}
 ee_append_base:
   - RUN dnf install -y xorriso
-# ee_python_interpreter:
-#  package_system: "python310"
-#  python_path: "/usr/bin/python3.10"
 # ee_prepend_galaxy:
 #   -
 # ee_prepend_builder:
