@@ -1,0 +1,5 @@
+---
+collections:
+- name: https://github.com/lennysh/ansible-unifi-inventory.git
+  type: git
+  version: convert-to-ansible-collection
