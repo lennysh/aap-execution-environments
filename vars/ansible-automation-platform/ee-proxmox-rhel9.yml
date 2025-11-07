@@ -1,0 +1,37 @@
+---
+dest_registry_name: quay.io
+rhel_version: rhel9
+ansible_core_version: 2.17
+ee_build_tag: 2.17 # defaults to latest
+ee_registry_add_timestamp_tag: false # defaults to true
+image_name: lshirley/ansible-automation-platform/ee-proxmox-{{ rhel_version | trim }}
+ee_base_image: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_base_sig_name: registry.redhat.io/ansible-automation-platform/ee-minimal-{{ rhel_version | trim }}:{{ ansible_core_version }}
+ee_package_manager_path: /usr/bin/microdnf
+# ee_python_interpreter:
+#  package_system: "python310"
+#  python_path: "/usr/bin/python3.11"
+ee_build_files:
+  - src: "{{ build_ee_dest_dir }}/ansible.cfg"
+    dest: configs
+ee_bindep:
+  - python3.11-devel [platform:rpm]
+  - pkg-config [platform:rpm]
+  - systemd-devel [platform:rpm]
+  - gcc [platform:rpm]
+# ee_python:
+#   -
+ee_collections:
+  - name: community.proxmox
+# ee_prepend_base:
+#   - RUN microdnf upgrade -y
+ee_prepend_galaxy:
+  - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
+# ee_prepend_builder:
+#   -
+# ee_prepend_final:
+#   -
+ee_append_final:
+  - RUN microdnf reinstall tzdata -y
+  - RUN rm -f /etc/ansible/ansible.cfg
+  - RUN microdnf clean all
