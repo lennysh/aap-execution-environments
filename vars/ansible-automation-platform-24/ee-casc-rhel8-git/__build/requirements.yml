@@ -1,0 +1,13 @@
+---
+collections:
+- name: https://github.com/redhat-cop/infra.controller_configuration.git
+  type: git
+  version: devel
+- name: ansible.controller
+  version: '>=4.5.0,<4.6.0'
+- name: https://github.com/ansible/event-driven-ansible.git
+  type: git
+  version: main
+- name: https://github.com/ansible-collections/ansible_hub.git
+  type: git
+  version: main

@@ -1,0 +1,29 @@
+---
+version: 3
+dependencies:
+  ansible_core:
+      package_pip: ansible-core==2.15
+  ansible_runner:
+      package_pip: ansible-runner
+  galaxy: requirements.yml
+  python: requirements.txt
+  system: bindep.txt
+additional_build_files:
+  - src: ansible.cfg
+    dest: configs
+additional_build_steps:
+  prepend_base:
+    - RUN subscription-manager register --activationkey=lshirley-rhel-server-self-support-dev --org=11009103
+  append_base:
+    - RUN dnf install -y xorriso
+  prepend_galaxy:
+    - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
+  append_final:
+    - RUN dnf clean all && rm -rf /var/cache/yum
+    - RUN subscription-manager unregister
+options:
+  package_manager_path: /usr/bin/dnf
+images:
+  base_image:
+    name: registry.access.redhat.com/ubi9/ubi:latest
+    signature_original_name: registry.access.redhat.com/ubi9/ubi:latest

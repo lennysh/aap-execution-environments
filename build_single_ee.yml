@@ -1,5 +1,5 @@
 ---
-- name: Build new EE
+- name: Build single EE
   hosts: localhost
   connection: local
   gather_facts: true
@@ -15,13 +15,14 @@
           - ee_vars_folder | length > 0
         fail_msg: "You must define ee_vars_folder!"
 
-    - name: Override build path (so I can push to git repo)
-      ansible.builtin.set_fact:
-        build_ee_dest_dir: "vars/{{ ee_vars_folder }}/__build"
-
-    - name: "Include EE vars: {{ ee_vars_folder | basename }}"
-      ansible.builtin.include_vars:
-        file: "vars/{{ ee_vars_folder }}/vars.yml"
-
-  roles:
-    - build_ee
+  tasks:
+    - name: Include build_ee tasks file
+      vars:
+        execution_environments:
+          - "{{ ee_vars_folder }}"
+      loop: "{{ execution_environments }}"
+      loop_control:
+        loop_var: execution_environment
+      ansible.builtin.include_tasks:
+        file: tasks/build_ee.yml
+...

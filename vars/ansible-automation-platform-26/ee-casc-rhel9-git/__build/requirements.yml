@@ -1,0 +1,19 @@
+---
+collections:
+- name: https://github.com/redhat-cop/infra.aap_configuration.git
+  type: git
+  version: devel
+- name: https://github.com/redhat-cop/aap_configuration_extended.git
+  type: git
+  version: devel
+- name: ansible.controller
+  version: '>=4.7,<4.8'
+- name: https://github.com/ansible/ansible.platform.git
+  type: git
+  version: stable-2.6
+- name: https://github.com/ansible/event-driven-ansible.git
+  type: git
+  version: main
+- name: https://github.com/ansible-collections/ansible_hub.git
+  type: git
+  version: main
