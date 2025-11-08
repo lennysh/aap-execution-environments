@@ -16,23 +16,23 @@ ee_bindep:
   - systemd-devel [platform:rpm]
   - gcc [platform:rpm]
 # ee_python:
-#   - 
+#   -
 ee_collections:
-  - name: https://github.com/redhat-cop/infra.aap_configuration.git       # infra.aap_configuration
+  - name: https://github.com/redhat-cop/infra.aap_configuration.git # infra.aap_configuration
     type: git
     version: devel
-  - name: https://github.com/redhat-cop/aap_configuration_extended.git    # infra.aap_configuration_extended
+  - name: https://github.com/redhat-cop/aap_configuration_extended.git # infra.aap_configuration_extended
     type: git
     version: devel
   - name: ansible.controller
     version: "'>=4.6,<4.7'"
-  - name: https://github.com/ansible/ansible.platform.git                 # ansible.platform
+  - name: https://github.com/ansible/ansible.platform.git # ansible.platform
     type: git
     version: stable-2.5
-  - name: https://github.com/ansible/event-driven-ansible.git             # ansible.eda
+  - name: https://github.com/ansible/event-driven-ansible.git # ansible.eda
     type: git
     version: main
-  - name: https://github.com/ansible-collections/ansible_hub.git          # ansible.hub
+  - name: https://github.com/ansible-collections/ansible_hub.git # ansible.hub
     type: git
     version: main
 # ee_prepend_base:

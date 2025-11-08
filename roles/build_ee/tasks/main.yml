@@ -73,7 +73,9 @@
 
     - name: Build new EE with container signature verification on version 2 or 3
       ansible.builtin.command:
-        cmd: 'ansible-builder build -vvv -t {{ __image_full_name }}:{{ vars[build_ee_main_var_name].ee_build_tag | default("latest") }} --prune-images --container-policy=system --squash=new'
+        cmd: >-
+          ansible-builder build -vvv -t {{ __image_full_name }}:{{ vars[build_ee_main_var_name].ee_build_tag | default("latest") }}
+          --prune-images --container-policy=system --squash=new
         chdir: "{{ build_ee_dest_dir }}"
       changed_when: true
       when: build_ee_version == 2 or build_ee_version == 3
@@ -95,7 +97,9 @@
   block:
     - name: "{{ __task_name }}"
       vars:
-        __task_name: "Push new EE to: {{ vars[build_ee_main_var_name].ee_dest_registry_name }}, tag: {{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}"
+        __task_name: >-
+          Push new EE to: {{ vars[build_ee_main_var_name].ee_dest_registry_name }},
+          tag: {{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}
       containers.podman.podman_image:
         name: "{{ __image_full_name }}"
         tag: "{{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}"
@@ -117,7 +121,9 @@
 
         - name: "{{ __task_name }}"
           vars:
-            __task_name: "Push new EE to: {{ vars[build_ee_main_var_name].ee_dest_registry_name }}, tag: {{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}"
+            __task_name: >-
+              Push new EE to: {{ vars[build_ee_main_var_name].ee_dest_registry_name }},
+              tag: {{ vars[build_ee_main_var_name].ee_build_tag | default('latest') }}
           containers.podman.podman_image:
             name: "{{ __image_full_name }}"
             tag: "{{ __datetime_tag }}"
