@@ -8,12 +8,13 @@ dependencies:
   python: requirements.txt
 additional_build_steps:
   prepend_base:
-    - RUN subscription-manager register --activationkey={{ rhel_activationkey }} --org={{ rhel_org }}
-  append_base:
-    - RUN dnf install -y xorriso
+    - RUN curl -o ./libisofs.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/libisofs-1.5.4-4.el9.x86_64.rpm
+    - RUN curl -o ./libburn.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/libburn-1.5.4-5.el9.x86_64.rpm
+    - RUN curl -o ./libisoburn.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/libisoburn-1.5.4-5.el9_5.x86_64.rpm
+    - RUN curl -o ./xorriso.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/xorriso-1.5.4-5.el9_5.x86_64.rpm
+    - RUN rpm -i ./libisofs.rpm ./libburn.rpm ./libisoburn.rpm ./xorriso.rpm
   append_final:
     - RUN dnf clean all && rm -rf /var/cache/yum
-    - RUN subscription-manager unregister
 options:
   package_manager_path: /usr/bin/dnf
 images:

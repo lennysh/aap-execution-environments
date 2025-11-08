@@ -19,9 +19,15 @@ ee_python:
 # ee_collections:
 #   -
 ee_prepend_base:
-  - RUN subscription-manager register --activationkey={{ rhel_activationkey }} --org={{ rhel_org }}
-ee_append_base:
-  - RUN dnf install -y xorriso
+  # Install xorriso
+  - RUN curl -o ./libisofs.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/libisofs-1.5.4-4.el9.x86_64.rpm
+  - RUN curl -o ./libburn.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/libburn-1.5.4-5.el9.x86_64.rpm
+  - RUN curl -o ./libisoburn.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/libisoburn-1.5.4-5.el9_5.x86_64.rpm
+  - RUN curl -o ./xorriso.rpm https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/xorriso-1.5.4-5.el9_5.x86_64.rpm
+  - RUN rpm -i ./libisofs.rpm ./libburn.rpm ./libisoburn.rpm ./xorriso.rpm
+  # - RUN subscription-manager register --activationkey={{ rhel_activationkey }} --org={{ rhel_org }}
+# ee_append_base:
+#   - RUN dnf install -y xorriso
 # ee_prepend_galaxy:
 #   -
 # ee_prepend_builder:
@@ -30,4 +36,4 @@ ee_append_base:
 #   -
 ee_append_final:
   - RUN dnf clean all && rm -rf /var/cache/yum
-  - RUN subscription-manager unregister
+  # - RUN subscription-manager unregister
