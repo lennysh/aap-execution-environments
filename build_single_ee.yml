@@ -23,6 +23,7 @@
       loop: "{{ execution_environments }}"
       loop_control:
         loop_var: execution_environment
+        index_var: ee_idx
       ansible.builtin.include_tasks:
         file: tasks/build_ee.yml
 ...
